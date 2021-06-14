@@ -57,9 +57,8 @@ class SampleAgent(object):
 
         #My target is the agent i am targeting to predict *********************************** ** ************** **
         self.mytarget=1  
-
-
-
+        self.isdead = 0 #Variable to know if my target player is dead or alive
+        self.me_dead =0 # Variable to know if I am alive or not
 
 
         # the hate attribute contains the player ID that I hate the most.
@@ -102,17 +101,33 @@ class SampleAgent(object):
                 logging.debug("Entering vote")
                 voter = getattr(row,"idx")
                 target = getattr(row,"agent")
-                # logging.debug("We are in voting sections")
+                logging.debug("isdead = {} and medead = {}".format(self.isdead,self.me_dead))
+
+                
+                if( self.isdead == 0 and self.me_dead == 0):
+
+                    if voter == self.mytarget:
+                        if target == self.myid:
+
+                            logging.debug("Yes he is my target {}".format(1))
+
+                        else :
+
+                            logging.debug("No he is my target {}".format(0))
+
+                
+
+
                 if target == self.myid:
                     
-                    # They voted for me!
-                    logging.debug("THe Me is {} and voter is {} and the main is {}".format(self.myid,voter,self.mytarget))
-                    # logging.debug("Agent {} voted for me!".format(voter))
-                    if voter == self.mytarget:
-                        self.votetrack=1
-                        logging.debug("Yes he is my target {}".format(1))
-                    # else:
-                    #     logging.debug("No he is my target {}".format(0))
+                    # # They voted for me!
+                    # logging.debug("THe Me is {} and voter is {} and the main is {}".format(self.myid,voter,self.mytarget))
+                    # # logging.debug("Agent {} voted for me!".format(voter))
+                    # if voter == self.mytarget:
+                    #     self.votetrack=1
+                    #     logging.debug("Yes he is my target {}".format(1))
+                    # # else:
+                    # #     logging.debug("No he is my target {}".format(0))
                     self.player_score[voter-1] += 100
 
                 #     logging.debug("No he is my target {}".format(0))
@@ -133,10 +148,11 @@ class SampleAgent(object):
         if(request == "DAILY_FINISH"):
             if(self.day_no!=0):
                 logging.debug("The day is finished**********************")
-                logging.debug("The FINAL value of counter -ve is {}".format(self.counter_negative[0]))
-                logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
-                # logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
-                self.votetrack = 0
+                if(self.me_dead != 1 and self.isdead != 1):
+                    logging.debug("The FINAL value of counter -ve is {}".format(self.counter_negative[0]))
+                    logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
+              
+                    self.votetrack = 0
 
         # At the beginning of the day, reduce score of dead players
         if (request == "DAILY_INITIALIZE"):
@@ -145,6 +161,12 @@ class SampleAgent(object):
             for i in range(self.player_total):
                 if (base_info["statusMap"][str(i+1)] == "DEAD"):
                     self.player_score[i] -= 10000
+                    if(base_info["statusMap"][str(1)] == "DEAD"):
+                        logging.debug(" HE AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        self.isdead = 1
+                    if(base_info["statusMap"][str(self.myid)] == "DEAD"):
+                        logging.debug(" I AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        self.me_dead = 1
 
 
 
