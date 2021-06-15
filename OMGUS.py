@@ -18,7 +18,7 @@ from random import randint
 # If we run multiple instance of this agent, it is good if
 # Each instance has a different name. In a contest setting,
 # You don't want to do this.
-myname = 'omgus{:02d}'.format(randint(0,99))
+myname = 'training data'.format(randint(0,99)) # Save training data
 
 class SampleAgent(object):
     
@@ -86,11 +86,13 @@ class SampleAgent(object):
     # new information (no return)
     def update(self, base_info, diff_data, request):
         # logging.debug("# UPDATE")
-        logging.debug("The type of update is : {}".format(request))
-        if(request == "VOTE"):
-            logging.debug("This is the voting request")
+        # logging.debug("The type of update is : {}".format(request))
+        # if(request == "VOTE"):
+        #     logging.debug("This is the voting request")
         
         self.day_no = base_info["day"]
+
+    
 
                 # Check each line in Diff Data for talks or votes
         # logging.debug(diff_data)
@@ -98,22 +100,28 @@ class SampleAgent(object):
             type = getattr(row,"type")
             text = getattr(row,"text")
             if (type == "vote"):
-                logging.debug("Entering vote")
+                # logging.debug("Entering vote")
                 voter = getattr(row,"idx")
                 target = getattr(row,"agent")
-                logging.debug("isdead = {} and medead = {}".format(self.isdead,self.me_dead))
+                # logging.debug("isdead = {} and medead = {}".format(self.isdead,self.me_dead))
 
                 
                 if( self.isdead == 0 and self.me_dead == 0):
-
                     if voter == self.mytarget:
                         if target == self.myid:
-
-                            logging.debug("Yes he is my target {}".format(1))
+                            var =1
+                            logging.debug("{}  , {}  , {}  ".format(self.counter_negative[0],self.counter_positive[0],1))
+                            # logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
+                            # logging.debug("Yes he is my target {}".format(1))
+              
 
                         else :
 
-                            logging.debug("No he is my target {}".format(0))
+                            var=0
+                            logging.debug("{}  , {}  , {}  ".format(self.counter_negative[0],self.counter_positive[0],0))
+                            # logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
+                            # logging.debug("No he is my target {}".format(0))
+              
 
                 
 
@@ -145,14 +153,15 @@ class SampleAgent(object):
                     self.player_score[source-1] += 1
 
 
-        if(request == "DAILY_FINISH"):
-            if(self.day_no!=0):
-                logging.debug("The day is finished**********************")
-                if(self.me_dead != 1 and self.isdead != 1):
-                    logging.debug("The FINAL value of counter -ve is {}".format(self.counter_negative[0]))
-                    logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
+        # if(request == "DAILY_FINISH"):
+
+        #     if(self.day_no!=0):
+                # logging.debug("The day is finished**********************")
+                # if(self.me_dead != 1 and self.isdead != 1):
+                #     logging.debug("The FINAL value of counter -ve is {}".format(self.counter_negative[0]))
+                #     logging.debug("The FINAL value of counter +ve is {}".format(self.counter_positive[0]))
               
-                    self.votetrack = 0
+                    # self.votetrack = 0
 
         # At the beginning of the day, reduce score of dead players
         if (request == "DAILY_INITIALIZE"):
@@ -162,10 +171,10 @@ class SampleAgent(object):
                 if (base_info["statusMap"][str(i+1)] == "DEAD"):
                     self.player_score[i] -= 10000
                     if(base_info["statusMap"][str(1)] == "DEAD"):
-                        logging.debug(" HE AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        # logging.debug(" HE AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         self.isdead = 1
                     if(base_info["statusMap"][str(self.myid)] == "DEAD"):
-                        logging.debug(" I AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        # logging.debug(" I AM DEAD !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         self.me_dead = 1
 
 
@@ -209,12 +218,12 @@ class SampleAgent(object):
     # Finish (no return)
     def finish(self):
         # logging.debug("# FINISH")
-        logging.debug("-------------------------------------------------GAME ENDS---------------------------------------------------------------------------------")
+        # logging.debug("-------------------------------------------------GAME ENDS---------------------------------------------------------------------------------")
         return None
 
 agent = SampleAgent(myname)
 
 # run
 if __name__ == '__main__':
-    logging.debug(" negative talks,       positive talks,           Vote(Yes/No)")
+    logging.debug(" negative talks, positive talks, Vote(Yes/No)")
     aiwolfpy.connect_parse(agent)
