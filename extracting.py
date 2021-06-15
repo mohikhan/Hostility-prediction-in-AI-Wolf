@@ -18,7 +18,7 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
             if(source == mytarget):
 
 
-                logging.debug("My target said the sentence  : {}".format(text))
+                # logging.debug("My target said the sentence  : {}".format(text))
 
                 # Calculate the number of negative sentences in a day
 
@@ -28,7 +28,7 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
 
                     counter_negative[0]+=1
 
-                    logging.debug("The value of counter -ve is {}".format(counter_negative[0]))
+                    # logging.debug("The value of counter -ve is {}".format(counter_negative[0]))
 
                 # Calculate the number of positive sentences in a day
 
@@ -38,7 +38,7 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
 
                     counter_positive[0]+=1
 
-                    logging.debug("The value of counter +ve is {}".format(counter_positive[0]))
+                    # logging.debug("The value of counter +ve is {}".format(counter_positive[0]))
 
         # elif (type == "vote"):
     
@@ -51,7 +51,7 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
         #         logging.debug(vote)
                 
 
-
+       #Calculate the complexity of the sentences
         
 
 
