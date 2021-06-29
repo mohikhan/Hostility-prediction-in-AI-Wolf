@@ -16,6 +16,8 @@ target = "Vote(Yes/No)"  # Target variable is whether the target agent voted for
 
 train_df= pd.read_csv("training data.csv")
 
+feature_cols = ['negative talks','positive talks','Negative length'] 
+
 x = train_df.drop(target, axis=1).values
 y = train_df[[target]].values
 y=y.ravel() #Converting to 1D array
@@ -38,7 +40,7 @@ y_pred = tree_model.predict(X_test)
 
 y_predtrain = tree_model.predict(X_train)
 
-print("Training accuracy of random forest on takeda dataset :",metrics.accuracy_score(y_train, y_predtrain))
+print("Training accuracy of decision tree on takeda dataset :",metrics.accuracy_score(y_train, y_predtrain))
 
 print("The confusion matrix of training dataset: ")
 print(confusion_matrix(y_train, y_predtrain))
@@ -64,7 +66,7 @@ plt.show()
 
 y_pred=tree_model.predict(X_test)
 
-print("Test accuracy of random forest on takeda dataset :",metrics.accuracy_score(y_test, y_pred))
+print("Test accuracy of decision on takeda dataset :",metrics.accuracy_score(y_test, y_pred))
 
 print("The confusion matrix of test dataset: ")
 print(confusion_matrix(y_test, y_pred))
@@ -85,4 +87,20 @@ for i in range(2):
 plt.show()
 
 
+#Printing the decision tree
+
+
+from sklearn.tree import export_graphviz
+# from sklearn.externals.six import StringIO  
+from six import StringIO
+
+from IPython.display import Image  
+import pydotplus
+dot_data = StringIO()
+export_graphviz(tree_model, out_file=dot_data,  
+                filled=True, rounded=True,
+                special_characters=True,feature_names = feature_cols,class_names=['0','1'])
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
+graph.write_png('DT.png')
+Image(graph.create_png())
 
