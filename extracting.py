@@ -3,7 +3,7 @@
 
 from OMGUS import *
 
-def extract_update(base_info,diff_data,request,myid,counter_negative,counter_positive,mytarget):
+def extract_update(base_info,diff_data,request,myid,counter_negative,counter_positive,negative_length,mytarget):
     
 
 
@@ -27,6 +27,8 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
                 or "REQUEST ANY (VOTE Agent[{:02d}])".format(myid) in text):
 
                     counter_negative[0]+=1
+
+                    negative_length[0]+=len(text)
 
                     # logging.debug("The value of counter -ve is {}".format(counter_negative[0]))
 
@@ -57,3 +59,5 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
 
 
 # Calculate the complexity of the sentence (inspired from killer queen)  
+
+#..................
