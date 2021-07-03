@@ -1,7 +1,7 @@
-# This file is used to extract the feautures for the neural networks from the agent game 
+# This file is used to extract the feautures for the training of different machine learning algorithms from the agent game 
 # in every day ending
 
-from OMGUS import *
+
 
 def extract_update(base_info,diff_data,request,myid,counter_negative,counter_positive,negative_length,mytarget):
     
@@ -42,22 +42,8 @@ def extract_update(base_info,diff_data,request,myid,counter_negative,counter_pos
 
                     # logging.debug("The value of counter +ve is {}".format(counter_positive[0]))
 
-        # elif (type == "vote"):
-    
-        #     voter = getattr(row,"idx")
-        #     target = getattr(row,"agent")
-         
-        #     if (target == myid and voter == mytarget):
-        #         logging.debug("Agent target {} voted for me!".format(voter))
-        #         vote = 1
-        #         logging.debug(vote)
-                
 
-       #Calculate the complexity of the sentences
+       #Calculate the complexity of the sentences (Any logic?)
         
 
 
-
-# Calculate the complexity of the sentence (inspired from killer queen)  
-
-#..................
