@@ -39,9 +39,11 @@ takeda_forest_model=RandomForestClassifier(n_estimators=100)
 
 takeda_forest_model.fit(X_train,y_train)
 y_predtrain = takeda_forest_model.predict(X_train)
-
+print()
 print("Training accuracy of random forest on takeda dataset :",metrics.accuracy_score(y_train, y_predtrain))
-
+print()
+# Also calculating the test accuracy for this model to compare it at last
+y_pred=takeda_forest_model.predict(X_test)
 
 #*******************************************************************************************************************************
 #wasabi model
@@ -70,7 +72,7 @@ wasabi_forest_model.fit(X2_train,y2_train)
 y2_predtrain = wasabi_forest_model.predict(X2_train)
 
 print("Training accuracy of random forest on wasabi dataset :",metrics.accuracy_score(y2_train, y2_predtrain))
-
+print()
 #*******************************************************************************************************************************
 
 
@@ -102,8 +104,8 @@ reporter_forest_model=RandomForestClassifier(n_estimators=100)
 reporter_forest_model.fit(X3_train,y3_train)
 y3_predtrain = reporter_forest_model.predict(X3_train)
 
-print("Training accuracy of random forest on wasabi dataset :",metrics.accuracy_score(y3_train, y3_predtrain))
-
+print("Training accuracy of random forest on reporter dataset :",metrics.accuracy_score(y3_train, y3_predtrain))
+print()
 
 
 #***************************************************************************************************************************************
@@ -135,8 +137,8 @@ sample_forest_model=RandomForestClassifier(n_estimators=100)
 sample_forest_model.fit(X4_train,y4_train)
 y4_predtrain = sample_forest_model.predict(X4_train)
 
-print("Training accuracy of random forest on wasabi dataset :",metrics.accuracy_score(y4_train, y4_predtrain))
-
+print("Training accuracy of random forest on sample agent dataset :",metrics.accuracy_score(y4_train, y4_predtrain))
+print()
 
 #***************************************************************************************************************************************
 
@@ -178,7 +180,91 @@ for i in range(len(X_valid)):
 
     if(ans[3]==1):
         model_weights[3]+= ans.count(0)/len(ans)
-    print(ans)
-    print(model_weights)
-    print("************")
 
+    # Remove comment to see how weights are changing    
+    # print(ans)
+    # print(model_weights)
+    # print("************")
+
+print("The weights of the models are:",model_weights )
+print()
+# Prediction on test dataset
+takeda1 = takeda_forest_model.predict(X_test)
+wasabi1 = wasabi_forest_model.predict(X_test)
+reporter1 = reporter_forest_model.predict(X_test)
+sample1 = sample_forest_model.predict(X_test)
+
+output = [0]*len(X_test)
+checker = [0,0,0,0]
+ones =0
+zeroes =0
+for i in range(len(X_test)):
+    checker = [0,0,0,0]
+    ones = 0
+    zeroes = 0
+    if(takeda1[i]==1):
+        checker[0] = 1
+
+    if(wasabi1[i]==1):
+        checker[1] = 1
+
+    if(reporter1[i]==1):
+        checker[2] = 1
+
+    if(sample1[i]==1):
+        checker[3] = 1
+
+    for j in range(len(checker)):
+        if(checker[j]==1):
+            ones += model_weights[j]
+
+        else:
+            zeroes+= model_weights[j]
+    # print("zeroes = ",zeroes)
+    # print("ones = ",ones)
+    if(ones>zeroes):
+        output[i] = 1   
+    else:
+        output[i] = 0
+    
+    # print(output[i])
+
+
+# print(output)
+print("The test accuracy of weighted ensemble voting method is : ",metrics.accuracy_score(y_test, output) )
+print()
+print("Test accuracy of traditional random forest using takeda model is :",metrics.accuracy_score(y_test, y_pred))
+print()
+# Plotting the confusion matrix
+
+# cm = confusion_matrix(y_test, output)
+
+# fig, ax = plt.subplots(figsize=(8, 8))
+# ax.imshow(cm)
+# ax.grid(False)
+# ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+# ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+# ax.set_ylim(1.5, -0.5)
+# for i in range(2):
+#     for j in range(2):
+#         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+# plt.show()
+
+
+
+
+
+# Plotting the confusion matrix
+
+# cm = confusion_matrix(y_test, y_pred)
+
+# fig, ax = plt.subplots(figsize=(8, 8))
+# ax.imshow(cm)
+# ax.grid(False)
+# ax.xaxis.set(ticks=(0, 1), ticklabels=('Predicted 0s', 'Predicted 1s'))
+# ax.yaxis.set(ticks=(0, 1), ticklabels=('Actual 0s', 'Actual 1s'))
+# ax.set_ylim(1.5, -0.5)
+# for i in range(2):
+#     for j in range(2):
+#         ax.text(j, i, cm[i, j], ha='center', va='center', color='red')
+# plt.show()
